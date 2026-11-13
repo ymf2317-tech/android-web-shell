@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">反重力远程</string>
+    <string name="settings_title">设置</string>
+    <string name="shortcut_settings">设置</string>
+    <string name="pick_file">选择文件</string>
+    <string name="pick_source">从哪里选</string>
+    <string name="pick_camera">拍照</string>
+    <string name="pick_images">照片和视频</string>
+    <string name="camera_failed">打不开相机</string>
+    <string name="download_started">已开始下载</string>
+    <string name="download_failed">下载失败，已交给浏览器</string>
+    <string name="need_camera">该功能需要摄像头/麦克风权限，暂未开启</string>
+    <string name="settings_hint">地址</string>
+    <string name="settings_save">保存并刷新</string>
+    <string name="settings_clear">清除缓存与 Cookie</string>
+    <string name="settings_reset">恢复默认地址</string>
+    <string name="settings_done">已保存</string>
+    <string name="settings_cleared">已清除</string>
+</resources>

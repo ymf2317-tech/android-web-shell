@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- API 29+ 用框架自带 DayNight：系统深色时 WebView 的 prefers-color-scheme 才是 dark。
+         平台没有 Theme.DeviceDefault.DayNight.NoActionBar，所以手动关掉 ActionBar。 -->
+    <style name="ShellTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">@color/window_bg</item>
+        <item name="android:statusBarColor">@color/window_bar</item>
+        <item name="android:navigationBarColor">@color/window_bar</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:actionBarSize">0dp</item>
+    </style>
+</resources>

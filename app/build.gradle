@@ -1,0 +1,73 @@
+plugins {
+    id 'com.android.application'
+}
+
+// 站点参数由 scripts/build.mjs 通过 -P 传入；单独手编时用默认值
+def siteAppId = project.findProperty('siteAppId') ?: 'io.dsh.shell.dsh'
+def siteVersionCode = (project.findProperty('siteVersionCode') ?: '1').toInteger()
+def siteVersionName = project.findProperty('siteVersionName') ?: '1.0'
+
+// 签名信息不进仓库：读根目录 keystore.properties（已 gitignore）。
+// 没有这个文件（比如别人 clone 下来）就不签名，出的是 unsigned release —— 用 --debug 也能直接编来玩。
+def ksProps = new Properties()
+def ksPropsFile = rootProject.file('keystore.properties')
+if (ksPropsFile.exists()) {
+    ksPropsFile.withInputStream { ksProps.load(it) }
+}
+def ksFile = rootProject.file(ksProps.getProperty('storeFile') ?: 'keystore/shell.jks')
+def hasKeystore = ksFile.exists() && ksProps.getProperty('storePassword') != null
+
+android {
+    namespace 'io.dsh.shell'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId siteAppId
+        minSdk 26
+        targetSdk 35
+        versionCode siteVersionCode
+        versionName siteVersionName
+        resConfigs "zh", "en"
+    }
+
+    signingConfigs {
+        if (hasKeystore) {
+            release {
+                storeFile ksFile
+                storePassword ksProps.getProperty('storePassword')
+                keyAlias ksProps.getProperty('keyAlias') ?: 'shell'
+                keyPassword ksProps.getProperty('keyPassword') ?: ksProps.getProperty('storePassword')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix null
+        }
+        release {
+            // 排查期先关掉压缩：闪退要能拿到原始类名与行号
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig hasKeystore ? signingConfigs.release : null
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packagingOptions {
+        resources.excludes += ['META-INF/*']
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+// 没有第三方依赖：纯 framework，APK 越薄越好
+dependencies { }

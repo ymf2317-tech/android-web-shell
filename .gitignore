@@ -1,0 +1,29 @@
+# 构建产物
+build/
+dist/
+app/build/
+.gradle/
+local.properties
+
+# 签名（绝不进仓库：泄露 keystore 等于任何人都能签同包名的"更新包"）
+keystore/
+keystore.properties
+*.jks
+*.keystore
+
+# 会话工作留痕（脚本/测试样本/预览图）
+worklog/
+
+# 图标源文件（体积大、可从站点重新抓）
+icons/raw/
+
+# 由 scripts/build.mjs 按站点生成，每次构建都会重写
+app/src/main/res/values/site.xml
+app/src/main/res/xml/shortcuts.xml
+app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+
+# 编辑器
+.idea/
+*.iml
+.DS_Store
+Thumbs.db

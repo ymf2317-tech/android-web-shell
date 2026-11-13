@@ -1,0 +1,69 @@
+{
+  "$comment": "一个站点 = 一个独立 APK，代码只有一套模板，差异全部在这份 JSON 里。加站点：复制一条 → node scripts/build.mjs（--site=id 只编一个）",
+  "$fields": {
+    "externalHosts": "可选。默认（不写或写空数组）= 所有链接都在壳内处理，登录也在壳内 WebView 完成；只有确实要甩给系统浏览器的域名才往里写",
+    "inlineHosts": "可选。默认(build.mjs 的 DEFAULT_INLINE_HOSTS)把 Google/微软/Apple/微信登录域名留在当前 WebView 原地加载；登录绝不能开二层，否则站点本体拿不到 session"
+  },
+  "sites": [
+    {
+      "id": "dsh",
+      "appName": "DSH",
+      "packageName": "io.dsh.shell.dsh",
+      "versionName": "1.2.1",
+      "versionCode": 7,
+      "url": "https://win-c6rn757boo4.tailddd7c0.ts.net/",
+      "icon": "icons/dsh.png",
+      "notes": "DeepSeek Harness 主入口；tailnet 上无 token，可直接访问"
+    },
+    {
+      "id": "sillytavern",
+      "appName": "酒馆",
+      "packageName": "io.dsh.shell.sillytavern",
+      "versionName": "1.0.1",
+      "versionCode": 2,
+      "url": "http://100.92.67.72:8010/",
+      "icon": "icons/sillytavern.png",
+      "notes": "SillyTavern 酒馆（小主机 8010）；http 明文，需 usesCleartextTraffic。原「监控」是叫错了，端口 8010 是酒馆"
+    },
+    {
+      "id": "alist",
+      "appName": "网盘",
+      "packageName": "io.dsh.shell.alist",
+      "versionName": "1.1.1",
+      "versionCode": 3,
+      "url": "http://100.92.67.72:5244/",
+      "icon": "icons/alist.png",
+      "notes": "小主机 alist（5244）；登录态留在 WebView Cookie 里"
+    },
+    {
+      "id": "trilium",
+      "appName": "笔记",
+      "packageName": "io.dsh.shell.trilium",
+      "versionName": "1.1.1",
+      "versionCode": 3,
+      "url": "https://ymfd-tril.duckdns.org/",
+      "icon": "icons/trilium.png",
+      "notes": "Trilium Notes；首次在壳内登录，Cookie 持久化后免登录（不带 ntxId，避免 token 过期后打不开）"
+    },
+    {
+      "id": "antigravity",
+      "appName": "反重力远程",
+      "packageName": "io.dsh.shell.antigravity",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "url": "https://antigravity.google.com/remote?path=%2Fview%2Fremote-control",
+      "icon": "icons/antigravity.png",
+      "notes": "Google Antigravity 的 remote-control 用本机 WebView 打开；登录就在当前页面完成（登录域名原地加载）。图标是自绘的，不含 Google 元素；桌面名用中文「反重力远程」，避免直接用官方英文名/logo 分发"
+    },
+    {
+      "id": "github",
+      "appName": "GitHub",
+      "packageName": "io.dsh.shell.github",
+      "versionName": "1.1.1",
+      "versionCode": 3,
+      "url": "https://github.com/",
+      "icon": "icons/github.png",
+      "notes": "GitHub；壳内登录可用（GitHub 不拒绝 WebView）"
+    }
+  ]
+}
