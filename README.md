@@ -51,6 +51,9 @@ keytool -genkeypair -v -keystore keystore/shell.jks -alias shell \
 
 没有 keystore 也能编 `--debug` 包直接试。
 
+> CI：仓库里的 `ci/build.yml` 是现成的 GitHub Actions 工作流（打 tag → 编译 → 传 release 附件）。
+> 放到 `.github/workflows/` 即可启用 —— 但推送 workflow 文件要求 PAT 带 `workflow` scope，本仓库的自动化暂时手动跑。
+
 ---
 
 # 工程细节
