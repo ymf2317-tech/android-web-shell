@@ -113,7 +113,13 @@ cd /d/dsh-workspaces/dsh/android-shell
 3. **其它 http(s)** → `InnerActivity` 二层网页：顶部 44dp 返回栏（`‹` 返回 / 标题 / `✕` 关闭），
    自带前进后退栈，返回键先 `web.canGoBack()`。这就是"在 DSH 里点链接开二层网页、不顶掉当前页"。
 
-`window.open` / `target=_blank` 走 `followPopup()`，遵守同一套路由。
+`window.open` / `target=_blank` 走 `followPopup()`，遵守同一套路由。但**这条路径要 `popupLayer` 才通**：
+
+- `popupLayer: true`（DSH、通用壳）→ `setSupportMultipleWindows(true)`，`onCreateWindow` 把目标地址接住再交给 `route()`：
+  站外进二层、本站与登录域名原地加载。**当前页永远不被替换**。
+- 不写 / `false`（反重力远程这类靠同页 OAuth 回跳的站点）→ `setSupportMultipleWindows(false)`，
+  `window.open` 一律塞回当前 WebView。此时**别把普通浏览站点写进 `inlineHosts`**：
+  之前 `github.com` 在默认名单里，结果 DSH 里点 GitHub 直接把 DSH 顶掉，返回还要重新加载。
 
 ## 已实装能力
 
