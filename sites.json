@@ -54,7 +54,7 @@
       "versionCode": 4,
       "url": "https://antigravity.google.com/remote?path=%2Fview%2Fremote-control",
       "icon": "icons/antigravity.png",
-      "notes": "Google Antigravity 的 remote-control 用本机 WebView 打开；登录就在当前页面完成（登录域名原地加载）。图标是自绘的，不含 Google 元素；桌面名用中文「反重力远程」，避免直接用官方英文名/logo 分发"
+      "notes": "Google Antigravity 的 remote-control 用本机 WebView 打开；登录就在当前页面完成（登录域名原地加载）。图标是自绘的，不含 Google 元素；桌面名用中文「反重力远程」，避免直接用官方英文名/logo 分发。⚠️ 从旧版（登录走二层的 1.2.0 及以前）升上来如果一直转圈，先在设置里清一次缓存与 Cookie —— 旧 WebView 里残留的登录态会让站点卡在启动页"
     },
     {
       "id": "github",

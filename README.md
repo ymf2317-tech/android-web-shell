@@ -134,6 +134,16 @@ cd /d/dsh-workspaces/dsh/android-shell
 
 ## 踩过的坑
 
+**升级后首页一直转圈（2026-11-14，antigravity 1.2.0 → 1.2.1）**
+
+现象：App 打开只有深色底 + 中间一个转圈，永不进页面；同一 URL 在 Chrome 里完全正常（同机同网）。
+根因：**旧 WebView 里残留的站点状态**。1.2.0 的 Google 登录是在"二层页面"里完成的，Cookie/localStorage 留了半截 session；
+1.2.1 改成同页登录后，站点拿这份旧状态换 token 一直失败，就卡死在启动页。
+处置：长按桌面图标 →「设置」→ **清除缓存与 Cookie** → 重开即恢复（实测「清空缓存就好了」）。
+
+排查顺序（别一上来怀疑链接 / 网络 / UA）：①清缓存 ②用 Chrome 打开同一 URL 对照 ③再看 UA 与路由。
+实测 `; wv` 与否两种 UA 在桌面 Chrome 里都能正常渲染 Welcome 页 —— UA 不是这类转圈的原因。
+
 1. **Android 15+ 全屏时序**：`getInsetsController()` 只能在 `setContentView()` **之后**调。
    之前放在前面，`PhoneWindow.getInsetsController → DecorView == null` 直接 NPE，
    在 Android 17（API 37）上必崩——1.0.0 / 1.0.1 的"一点就闪退"就是这个。
