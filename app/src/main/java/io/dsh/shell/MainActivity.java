@@ -49,12 +49,15 @@ public class MainActivity extends Activity {
     /** 拍照时预插入 MediaStore 得到的可写 URI；取消或失败要删掉这条空记录。 */
     private Uri cameraOut;
     private String homeUrl;
+    /** sites.json 的 popupLayer：true = 站外链接一律开二层，不替换当前页（DSH 这类站点）。 */
+    private boolean popupLayer;
 
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         try {
             homeUrl = resolveHomeUrl();
+            popupLayer = getResources().getBoolean(R.bool.site_popup_layer);
             applyEdgeToEdge();
             web = new WebView(this);
             web.setLayoutParams(new FrameLayout.LayoutParams(
@@ -155,8 +158,11 @@ public class MainActivity extends Activity {
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
         s.setDatabaseEnabled(true);
-        s.setSupportMultipleWindows(false);
-        s.setJavaScriptCanOpenWindowsAutomatically(false);
+        // 开不开多窗口是一条分水岭：
+        //   popupLayer=true → window.open 会走 onCreateWindow，被接住后交给 route()，站外进二层，当前页不受影响；
+        //   popupLayer=false → 全部塞回当前 WebView（登录流程靠同一 JS 环境回跳的站点必须这样）。
+        s.setSupportMultipleWindows(popupLayer);
+        s.setJavaScriptCanOpenWindowsAutomatically(popupLayer);
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setUseWideViewPort(true);
         s.setLoadWithOverviewMode(true);

@@ -47,6 +47,9 @@ const DEFAULT_EXTERNAL_HOSTS = []; // 默认全部在壳内处理（内部登录
  * 为什么不能开二层：OAuth 回来时靠的是同一个 JS 环境（window.opener / 同窗口 redirect），
  * 另开一层页面登录成功了，站点本体也拿不到 session —— 这就是 antigravity「登录了但本体没登录」的原因。
  * 站点可用 sites.json 的 inlineHosts 覆盖（覆盖，不是追加）。
+ *
+ * 注意：**别往里放普通浏览站点**（github.com 曾经在这里，后果是 DSH 里点 GitHub 链接
+ * 直接把 DSH 页面替换掉 —— 需要二层网页的站点必须把 popupLayer 打开）。
  */
 const DEFAULT_INLINE_HOSTS = [
   'accounts.google.com',
@@ -55,7 +58,6 @@ const DEFAULT_INLINE_HOSTS = [
   'login.microsoftonline.com',
   'appleid.apple.com',
   'open.weixin.qq.com',
-  'github.com',
 ];
 
 function writeSiteResources(site) {
@@ -71,11 +73,17 @@ function writeSiteResources(site) {
     .map(h => String(h).trim()).filter(Boolean);
   const inlineXml = inline
     .map(h => `    <item>${h.replace(/&/g, '&amp;')}</item>`).join('\n');
+  // popupLayer=true：允许开新窗口，但 onCreateWindow 把目标地址接住后交给 route()
+  //   → 站外链接走二层页面，绝不替换当前页（DSH 这类不需要站内登录的站点用）。
+  // false（默认）：setSupportMultipleWindows(false)，window.open 也塞进当前页 ——
+  //   这是"登录必须原地完成"的站点（如 antigravity）要的。
+  const popupLayer = site.popupLayer === true;
   const xml = `<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- 由 scripts/build.mjs 生成，请勿手改 -->
     <string name="site_url" translatable="false">${site.url.replace(/&/g, '&amp;')}</string>
     <string name="site_host" translatable="false">${host}</string>
+    <bool name="site_popup_layer">${popupLayer}</bool>
     <string-array name="site_external_hosts" translatable="false">
 ${externalXml}
     </string-array>
