@@ -37,6 +37,11 @@ public class SettingsActivity extends Activity {
         input.setSingleLine(true);
         SharedPreferences sp = getSharedPreferences(MainActivity.PREFS, MODE_PRIVATE);
         input.setText(sp.getString(MainActivity.KEY_URL, getString(R.string.site_url)));
+        // 通用壳：默认地址是空的，第一次打开就是在这里填
+        if (input.getText().toString().trim().isEmpty()) {
+            input.setHint(R.string.url_hint);
+            hint.setText(R.string.settings_first);
+        }
         root.addView(input, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -44,6 +49,10 @@ public class SettingsActivity extends Activity {
         save.setText(R.string.settings_save);
         save.setOnClickListener(v -> {
             String url = input.getText().toString().trim();
+            if (url.isEmpty()) {
+                toastShort(R.string.url_hint);
+                return;
+            }
             if (!url.startsWith("http")) {
                 url = "https://" + url;
             }

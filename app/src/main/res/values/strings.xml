@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">反重力远程</string>
+    <string name="app_name">网页壳</string>
     <string name="settings_title">设置</string>
     <string name="shortcut_settings">设置</string>
     <string name="pick_file">选择文件</string>
@@ -17,4 +17,7 @@
     <string name="settings_reset">恢复默认地址</string>
     <string name="settings_done">已保存</string>
     <string name="settings_cleared">已清除</string>
+    <string name="need_url">请先填写要打开的网址</string>
+    <string name="url_hint">例如 https://example.com</string>
+    <string name="settings_first">第一次使用：填入你自己的站点地址（任意网站都可以，之后随时能改）</string>
 </resources>

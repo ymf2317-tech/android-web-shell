@@ -60,7 +60,8 @@ const DEFAULT_INLINE_HOSTS = [
 
 function writeSiteResources(site) {
   const resValues = path.join(ROOT, 'app', 'src', 'main', 'res', 'values');
-  const host = new URL(site.url).host;
+  // url 可以留空：那就是"通用壳"，首启进设置页让用户自己填（site_host 也留空，运行时按用户填的地址算）
+  const host = site.url ? new URL(site.url).host : '';
   // 白名单：命中就走系统浏览器（登录页 / 要装 App 的站）。默认兜住各家 OAuth。
   const external = (site.externalHosts || DEFAULT_EXTERNAL_HOSTS)
     .map(h => String(h).trim()).filter(Boolean);

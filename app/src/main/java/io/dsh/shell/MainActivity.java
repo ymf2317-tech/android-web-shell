@@ -66,8 +66,13 @@ public class MainActivity extends Activity {
             configureWeb();
             if (state != null) {
                 web.restoreState(state);
-            } else {
+            } else if (!homeUrl.isEmpty()) {
                 web.loadUrl(homeUrl);
+            } else {
+                // 通用壳（地址留空）：首启直接进设置页，让用户填自己的站点
+                startActivity(new Intent(this, SettingsActivity.class));
+                android.widget.Toast.makeText(this, R.string.need_url,
+                        android.widget.Toast.LENGTH_LONG).show();
             }
         } catch (Throwable t) {
             showFatal(t);
@@ -196,8 +201,8 @@ public class MainActivity extends Activity {
             return true;
         }
         String host = u.getHost() == null ? "" : u.getHost().toLowerCase();
-        String site = getString(R.string.site_host).toLowerCase();
-        if (host.equals(site) || host.endsWith("." + site)) {
+        String site = siteHost();
+        if (!site.isEmpty() && (host.equals(site) || host.endsWith("." + site))) {
             return false;
         }
         // 登录域名一律留在当前 WebView：另开一层（或另开窗口）登录成功了，站点本体也拿不到
@@ -243,6 +248,31 @@ public class MainActivity extends Activity {
             // 资源缺失就当没有白名单
         }
         return false;
+    }
+
+    /**
+     * 站点主机名。写死地址的包由 build.mjs 生成 site_host；
+     * 通用壳（地址留空）则退回运行时用户填的那个地址的 host。
+     */
+    private String siteHost() {
+        String h = getString(R.string.site_host);
+        if (h != null && !h.trim().isEmpty()) {
+            return h.trim().toLowerCase();
+        }
+        try {
+            String u = homeUrl;
+            if (u == null || u.trim().isEmpty()) {
+                u = resolveHomeUrl();
+            }
+            if (u != null && !u.trim().isEmpty()) {
+                String host = Uri.parse(u).getHost();
+                if (host != null) {
+                    return host.toLowerCase();
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return "";
     }
 
     /** window.open / target=_blank：站内还是当前页，站外走二层或系统浏览器。 */

@@ -27,3 +27,7 @@ app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 *.iml
 .DS_Store
 Thumbs.db
+
+# 发布用的中间产物（含 API 响应，不入库）
+ci/*.json
+ci/release-body.md

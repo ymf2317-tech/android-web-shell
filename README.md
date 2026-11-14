@@ -18,12 +18,18 @@
 
 | APK | 桌面名 | 说明 |
 | --- | --- | --- |
+| `web-*.apk` | 网页壳 | **通用壳**：地址留空，首次启动自动进设置页，填任意站点即可。对外分发用这个 |
 | `antigravity-*.apk` | 反重力远程 | Google Antigravity 的 remote-control 页面。官方没有移动端 App，这个壳补上了：真全屏 + 登录就在本页面完成 |
 | `dsh-*.apk` | DSH | DeepSeek Harness 的网页 GUI |
 | `sillytavern-*.apk` | 酒馆 | SillyTavern |
 | `alist-*.apk` / `trilium-*.apk` / `github-*.apk` | 网盘 / 笔记 / GitHub | 也是同一套模板编出来的，可按需取用 |
 
-装完开一次，长按桌面图标 → 快捷方式「设置」，可以把地址换成**你自己的**服务器（所以这些 APK 不是只能连我的机器）。
+**两类包，别搞混**：
+
+- **通用壳**（`web`）：`sites.json` 里 `url` 留空 → `site_host` 也留空 → 运行时用用户填的地址算站点 host。
+  所以站内跳转、二层网页、外链白名单的判定逻辑一条都没改，只是"首页地址"这件事交给了用户。
+- **自带地址的包**：`url` 写死，装完直接进站点，适合自己用。别人装也一样能改地址
+  （长按桌面图标 → 快捷方式「设置」），只是首次不用填。
 
 ## 免责声明
 
@@ -192,14 +198,16 @@ alist 75.7%、antigravity 72.1%、trilium/github 83.8%、minipulse 83.8% —— 
 | sillytavern | 酒馆 | io.dsh.shell.sillytavern | 1.0.0 / 1 | `http://100.92.67.72:8010/` |
 | alist | 网盘 | io.dsh.shell.alist | 1.1.0 / 2 | `http://100.92.67.72:5244/` |
 | trilium | 笔记 | io.dsh.shell.trilium | 1.1.0 / 2 | `https://ymfd-tril.duckdns.org/` |
-| antigravity | Antigravity | io.dsh.shell.antigravity | 1.1.0 / 2 | `https://antigravity.google.com/remote?...` |
-| github | GitHub | io.dsh.shell.github | 1.1.0 / 2 | `https://github.com/` |
+| antigravity | 反重力远程 | io.dsh.shell.antigravity | 1.2.1 / 4 | `https://antigravity.google.com/remote?...` |
+| github | GitHub | io.dsh.shell.github | 1.1.1 / 3 | `https://github.com/` |
+| web | 网页壳 | io.dsh.shell.web | 1.0.0 / 1 | **空**（首启由用户填） |
 
 > `sillytavern` 之前叫 `minipulse`/「监控」，是**叫错了**：8010 是酒馆（SillyTavern），
 > minipulse 在 61208。包名换了，旧的那只「监控」需要手动卸载。
 
 ## 变更记录
 
+- **web-v1.0.0（通用壳）**：`sites.json` 的 `url` 允许留空 → 首启进设置页让用户填站点；`site_host` 改为运行时解析；`SettingsActivity` 空值拦截与首次提示；图标 `tools/make-blank-icon.mjs` 代码绘制。
 - **v1.2.1（当前）**：登录域名改为**原地加载**（`DEFAULT_INLINE_HOSTS`：accounts.google.com / login.microsoftonline.com / appleid.apple.com / open.weixin.qq.com / github.com …），并关掉 `setSupportMultipleWindows`，让 `window.open` 也落在同一个 WebView —— 修「登录成功在二层、本体没登录」。
 - v1.2.0：登录统一走壳内 WebView（`DEFAULT_EXTERNAL_HOSTS = []` + `WebTuning.normalizeUserAgent`），
   不再甩系统浏览器（dsh 也不例外）；图标全部归一化到 100% 填充；minipulse → sillytavern（酒馆）。
