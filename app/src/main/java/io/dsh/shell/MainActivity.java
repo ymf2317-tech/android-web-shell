@@ -21,6 +21,7 @@ import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
+import android.webkit.HttpAuthHandler;
 import android.webkit.PermissionRequest;
 import android.webkit.URLUtil;
 import android.webkit.ValueCallback;
@@ -189,6 +190,15 @@ public class MainActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView v, String url) {
                 return route(Uri.parse(url));
+            }
+
+            @Override
+            public void onReceivedHttpAuthRequest(WebView v, HttpAuthHandler h, String host, String realm) {
+                // HTTP 基本认证（SillyTavern 的 basicAuthMode 就是这种）：站点账号直接带，省得每次输
+                if (WebTuning.tryBuiltinAuth(MainActivity.this, h, host, siteHost())) {
+                    return;
+                }
+                WebTuning.handleHttpAuth(MainActivity.this, h, host, realm);
             }
         });
         web.setDownloadListener(this::download);

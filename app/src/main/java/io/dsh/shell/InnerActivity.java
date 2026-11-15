@@ -17,6 +17,7 @@ import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
+import android.webkit.HttpAuthHandler;
 import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -191,6 +192,14 @@ public class InnerActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView v, String url) {
                 return route(Uri.parse(url));
+            }
+
+            @Override
+            public void onReceivedHttpAuthRequest(WebView v, HttpAuthHandler h, String host, String realm) {
+                if (WebTuning.tryBuiltinAuth(InnerActivity.this, h, host, null)) {
+                    return;
+                }
+                WebTuning.handleHttpAuth(InnerActivity.this, h, host, realm);
             }
         });
         web.setDownloadListener(new DownloadListener() {

@@ -5,6 +5,9 @@ app/build/
 .gradle/
 local.properties
 
+# 站点自带的 HTTP 基本认证账号（私用，绝不进仓库）
+auth.local.json
+
 # 签名（绝不进仓库：泄露 keystore 等于任何人都能签同包名的"更新包"）
 keystore/
 keystore.properties
@@ -20,6 +23,7 @@ icons/raw/
 # 由 scripts/build.mjs 按站点生成，每次构建都会重写
 app/src/main/res/values/site.xml
 app/src/main/res/xml/shortcuts.xml
+app/src/main/res/values/auth.xml
 app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
 # 编辑器

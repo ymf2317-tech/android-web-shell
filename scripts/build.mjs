@@ -94,6 +94,29 @@ ${inlineXml}
 `;
   fs.writeFileSync(path.join(resValues, 'site.xml'), xml, 'utf8');
 
+  // 站点自带的 HTTP 基本认证账号：从 auth.local.json（在 .gitignore 里）读，默认空 = 不启用
+  const authFile = path.join(ROOT, 'auth.local.json');
+  let authUser = '';
+  let authPass = '';
+  if (fs.existsSync(authFile)) {
+    try {
+      const all = JSON.parse(fs.readFileSync(authFile, 'utf8'));
+      const a = all[site.id];
+      if (a && a.user) {
+        authUser = String(a.user);
+        authPass = String(a.pass || '');
+      }
+    } catch (e) {
+      console.warn('[build] auth.local.json 读不了：' + e.message);
+    }
+  }
+  const xmlEsc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const authXml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n'
+    + '    <string name="site_auth_user" translatable="false">' + xmlEsc(authUser) + '</string>\n'
+    + '    <string name="site_auth_pass" translatable="false">' + xmlEsc(authPass) + '</string>\n'
+    + '</resources>\n';
+  fs.writeFileSync(path.join(resValues, 'auth.xml'), authXml, 'utf8');
+
   const stringsPath = path.join(resValues, 'strings.xml');
   let strings = fs.readFileSync(stringsPath, 'utf8');
   strings = strings.replace(/<string name="app_name">[^<]*<\/string>/,

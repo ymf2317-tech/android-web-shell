@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">网页壳</string>
+    <string name="app_name">vps酒馆</string>
     <string name="settings_title">设置</string>
     <string name="shortcut_settings">设置</string>
     <string name="pick_file">选择文件</string>

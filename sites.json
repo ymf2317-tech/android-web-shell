@@ -67,6 +67,17 @@
       "notes": "GitHub；壳内登录可用（GitHub 不拒绝 WebView）"
     },
     {
+      "id": "vpstavern",
+      "appName": "vps酒馆",
+      "packageName": "io.dsh.shell.vpstavern",
+      "versionName": "1.0.0",
+      "versionCode": 1,
+      "url": "https://ymfd-tavern.duckdns.org/",
+      "icon": "icons/vpstavern.png",
+      "popupLayer": true,
+      "notes": "VPS 上的 SillyTavern（107.173.148.16）：站点开了 HTTP 基本认证（basicAuthMode），账号由 auth.local.json 生成、编进包内自动通过，私用不外发。popupLayer=true：站外链接开二层，不顶掉酒馆本体"
+    },
+    {
       "id": "web",
       "appName": "网页壳",
       "packageName": "io.dsh.shell.web",
